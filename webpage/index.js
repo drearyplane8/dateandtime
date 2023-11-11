@@ -1,6 +1,5 @@
 function getDateTime() {
     let date = new Date();
-    document.getElementById("day").textContent = date.getDay().toLocaleString(undefined, {minimumIntegerDigits: 2});
     
     document.getElementById("year").textContent = date.getFullYear();
 
@@ -9,6 +8,7 @@ function getDateTime() {
 
     makeMonthRequest();
     makeHourRequest();
+    makeDayRequest();
 }
 
 function makeMonthRequest() {
@@ -34,4 +34,17 @@ function makeHourRequest() {
 function handleHourRequest() {
     console.log(this.responseText)
     document.getElementById("hour").textContent = this.responseText.toLocaleString(undefined, {minimumIntegerDigits: 2});
+}
+
+function makeDayRequest() {
+    let request = new XMLHttpRequest();
+    request.addEventListener("load", handleDayRequest);
+    request.open("GET", "http://127.0.0.1:5000/day");
+    request.send();
+    console.log("made day request");
+}
+
+function handleDayRequest() {
+    console.log(this.responseText);
+    document.getElementById("day").textContent = this.responseText.toLocaleString(undefined, {minimumIntegerDigits: 2});
 }
