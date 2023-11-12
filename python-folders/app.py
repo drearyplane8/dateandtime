@@ -17,6 +17,8 @@ CLIENNT = MongoClient("mongodb+srv://01turbidphoneme:MpGTeXh7CYOCbgLo@cluster0.l
 DB = CLIENNT["hackathon"]
 COLLECTION = DB["date_collection"]
 
+pytesseract.pytesseract.tesseract_cmd = r'C:\Users\Lottie\Documents\dateandtime\Tesseract\tesseract.exe'
+
 @app.route("/")
 def year():
     return "2023" # Surely no one will use this after 2023
@@ -59,7 +61,6 @@ def convert_image_to_text():
     buffer.seek(0)
     image = Image.open(request.files["data"].stream)
     text = pytesseract.image_to_string(image)
-    print(text)
     return text
 
 @app.route("/tailor/swift/concert/countdown")
