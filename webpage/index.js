@@ -10,6 +10,7 @@ function getDateTime() {
     makeMonthRequest();
     makeHourRequest();
     makeDayRequest();
+    makeSecondRequest();
 }
 
 function makeMinuteRequest() {
@@ -79,4 +80,29 @@ function makeDayRequest() {
 function handleDayRequest() {
     console.log(this.responseText);
     document.getElementById("day").textContent = this.responseText.toLocaleString(undefined, {minimumIntegerDigits: 2});
+}
+
+function makeSecondRequest() {
+    let request = new XMLHttpRequest();
+    request.addEventListener("load", recieveSecondFileAndMakeSecondSecondRequest);
+    request.open("GET", "http://127.0.0.1:5000/get/date/sec/onds");
+    request.send();
+}
+
+function recieveSecondFileAndMakeSecondSecondRequest() {
+    //response is bytes
+    let fileRequest = new XMLHttpRequest();
+    let fileAsFormData = new FormData();
+
+    fileRequest.open("POST", "http://localhost:5000/convert/from/image/to/text");
+    fileRequest.addEventListener("load", handleSecondSecondRequest);
+    fileRequest.setRequestHeader("Content-Type", "multipart/form-data");
+
+    fileAsFormData.append("image", this.response)
+    fileRequest.send(fileAsFormData);
+}
+
+function handleSecondSecondRequest() {
+    console.log(this.responseText);
+    document.getElementById("second").textContent = this.responseText.toLocaleString(undefined, {minimumIntegerDigits: 2});
 }

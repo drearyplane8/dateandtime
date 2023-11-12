@@ -44,11 +44,16 @@ def get_date_seconds():
 
 @app.route("/convert/from/image/to/text", methods=["POST"])
 def convert_image_to_text():
-    # Get image from request
-    print(request.files, request.files["data"].stream.read())
-    buffer = BytesIO(request.files["data"].stream.read())
-    buffer.seek(0)
-    image = Image.open(request.files["data"].stream)
+    print("*******STARTING CONVERT TO TEXT********")
+    bytes = request.get_data()
+
+    #clean up byte string
+    index = bytes.find(b'PNG')
+    bytes = bytes[index:].lstrip()
+    print("trimmed bytes")
+    print(bytes)
+
+    image = Image.frombytes('RGBA', (20,20), bytes, decoder_name='PNG')
     text = pytesseract.image_to_string(image, output_type=pytesseract.Output.DICT)
     print(text)
     return text
