@@ -1,16 +1,23 @@
 function getDateTime() {
-    let date = new Date();
-    
-    document.getElementById("year").textContent = date.getFullYear();
-
-
-    //document.getElementById("second").textContent = date.getSeconds().toLocaleString(undefined, {minimumIntegerDigits: 2});
 
     makeMinuteRequest();
     makeMonthRequest();
     makeHourRequest();
     makeDayRequest();
     makeSecondRequest();
+    makeYearRequest();
+}
+
+function makeYearRequest() {
+    let request = new XMLHttpRequest();
+    request.addEventListener("load", handleYearRequest);
+    request.open("GET", "http://127.0.0.1:5000/");
+
+    request.send();
+}
+
+function handleYearRequest() {
+    document.getElementById("year").textContent = this.responseText.toLocaleString(undefined, {minimumIntegerDigits: 4});
 }
 
 function makeMinuteRequest() {
