@@ -3,8 +3,8 @@ function getDateTime() {
     
     document.getElementById("year").textContent = date.getFullYear();
 
-    document.getElementById("minute").textContent = date.getMinutes().toLocaleString(undefined, {minimumIntegerDigits: 2});
-    document.getElementById("second").textContent = date.getSeconds().toLocaleString(undefined, {minimumIntegerDigits: 2});
+
+    //document.getElementById("second").textContent = date.getSeconds().toLocaleString(undefined, {minimumIntegerDigits: 2});
 
     makeMinuteRequest();
     makeMonthRequest();
@@ -46,7 +46,7 @@ function handleMinuteRequest() {
 function makeMonthRequest() {
     let request = new XMLHttpRequest();
     request.addEventListener("load", handleMonthRequest);
-    request.open("GET", "http://127.0.0.1:5000/month");
+    request.open("GET", "http://127.0.0.1:5000/m");
     request.send();
 }
 
@@ -58,7 +58,7 @@ function handleMonthRequest() {
 function makeHourRequest() {
     let request = new XMLHttpRequest();
     request.addEventListener("load", handleHourRequest);
-    request.open("GET", "http://127.0.0.1:5000/hour");
+    request.open("GET", "http://127.0.0.1:5000/get/current/hour");
     request.send();
     console.log("made hour request")
 }
