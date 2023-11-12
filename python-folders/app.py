@@ -46,14 +46,30 @@ def get_date_seconds():
 def convert_image_to_text():
     print("*******STARTING CONVERT TO TEXT********")
     bytes = request.get_data()
-
-    #clean up byte string
-    index = bytes.find(b'PNG')
-    bytes = bytes[index:].lstrip()
-    print("trimmed bytes")
+    print("plain bytes")
     print(bytes)
 
-    image = Image.frombytes('RGBA', (20,20), bytes, decoder_name='PNG')
+    #clean up byte string
+    start_index = bytes.find(b'PNG')
+    bytes = bytes[start_index:].lstrip()
+
+    
+
+    end_index = bytes.find(b'IEND') + 7
+    print("end index" + str(end_index))
+    bytes = bytes[:end_index]
+
+    print("trimmed bytes")
+    print(bytes)
+    print(bytes.hex())
+
+    f = open("image.png", "wb")
+    f.write(bytes)
+    f.close()
+
+    bytesio = BytesIO(bytes)
+
+    image = Image.open(bytesio)
     text = pytesseract.image_to_string(image, output_type=pytesseract.Output.DICT)
     print(text)
     return text
