@@ -4,7 +4,7 @@ import multiprocessing as mp
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request
 from pymongo import MongoClient
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 import pytesseract
 from io import BytesIO
 import os
