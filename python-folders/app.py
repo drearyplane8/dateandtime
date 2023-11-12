@@ -18,6 +18,10 @@ CLIENNT = MongoClient("mongodb+srv://01turbidphoneme:MpGTeXh7CYOCbgLo@cluster0.l
 DB = CLIENNT["hackathon"]
 COLLECTION = DB["date_collection"]
 
+@app.route("/")
+def year():
+    return "2023" # Surely no one will use this after 2023
+
 @app.route("/get/date/sec/onds")
 def get_date_seconds():
     seconds = COLLECTION.find_one({"_id": "seconds"})["seconds"]
