@@ -45,29 +45,12 @@ def get_date_seconds():
 @app.route("/convert/from/image/to/text", methods=["POST"])
 def convert_image_to_text():
     print("*******STARTING CONVERT TO TEXT********")
-    bytes = request.get_data()
-    print("plain bytes")
-    print(bytes)
-
-    #clean up byte string
-    start_index = bytes.find(b'PNG')
-    bytes = bytes[start_index:].lstrip()
-
+    print("content type is " + request.content_type)
+    print(request.form["image"])
     
 
-    end_index = bytes.find(b'IEND') + 7
-    print("end index" + str(end_index))
-    bytes = bytes[:end_index]
-
-    print("trimmed bytes")
-    print(bytes)
-    print(bytes.hex())
-
-    f = open("image.png", "wb")
-    f.write(bytes)
-    f.close()
-
     bytesio = BytesIO(bytes)
+    print(bytesio.read())
 
     image = Image.open(bytesio)
     text = pytesseract.image_to_string(image, output_type=pytesseract.Output.DICT)

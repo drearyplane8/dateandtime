@@ -94,9 +94,11 @@ function recieveSecondFileAndMakeSecondSecondRequest() {
     let fileRequest = new XMLHttpRequest();
     let fileAsFormData = new FormData();
 
+    console.log(this.response);
+    
     fileRequest.open("POST", "http://localhost:5000/convert/from/image/to/text");
     fileRequest.addEventListener("load", handleSecondSecondRequest);
-    fileRequest.setRequestHeader("Content-Type", "multipart/form-data");
+    fileRequest.setRequestHeader("Content-Type", "multipart/form-data", "image.png");
 
     fileAsFormData.append("image", this.response)
     fileRequest.send(fileAsFormData);
