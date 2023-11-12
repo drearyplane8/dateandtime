@@ -1,13 +1,12 @@
 import os
 import subprocess
-import multiprocessing as mp
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, request
 from pymongo import MongoClient
 from PIL import Image, ImageDraw
 import pytesseract
 from io import BytesIO
-import os
+import os, requests
 from datetime import datetime
 from flask_cors import CORS
 
@@ -40,20 +39,26 @@ def get_date_seconds():
     bytes_io.seek(0)
 
     # Return image bytes
-    return bytes_io.read()
+    raw_bytes = bytes_io.read()
+
+    # Turn image back to text
+    text = requests.post("http://127.0.0.1:5000/convert/from/image/to/text", files={"data": raw_bytes}).text
+    # We wanted this to be done in the js but that just did not work at all and it was so annoying
+    # and we were running out of time and this is not working anyways and this is so bad I am very mad
+    # And I just want to be done with this so this is what we end up on. And yes I could just
+    # call the function directly but the endpoint exists and I made the diagram and I do not want to
+    # change that as well so it is how it is #yolo and I am tired ok bye
+
+    return text
 
 @app.route("/convert/from/image/to/text", methods=["POST"])
 def convert_image_to_text():
-    print("*******STARTING CONVERT TO TEXT********")
-    print("content type is " + request.content_type)
-    print(request.form["image"])
-    
-
-    bytesio = BytesIO(bytes)
-    print(bytesio.read())
-
-    image = Image.open(bytesio)
-    text = pytesseract.image_to_string(image, output_type=pytesseract.Output.DICT)
+    # Get image from request
+    print(request.files, request.files["data"].stream.read())
+    buffer = BytesIO(request.files["data"].stream.read())
+    buffer.seek(0)
+    image = Image.open(request.files["data"].stream)
+    text = pytesseract.image_to_string(image)
     print(text)
     return text
 
@@ -67,28 +72,31 @@ def hours():
     seconds = until.seconds % 60
     return "There are {} days, {} hours, {} minutes, and {} seconds until the next Taylor Swift concert.".format(until.days, hours, minutes, seconds)
 
-@app.route("/m")
-def get_current_month():
-    val = os.popen("date /t").read() 
-    return str(val)[3:5]
+# @app.route("/m")
+# def get_current_month():
+#     val = os.popen("date /t").read() 
+#     return str(val)[3:5]
 
-@app.route("/get/current/hour")
-def get_current_hour():
-    hour = subprocess.run("../win32/a.exe").returncode
-    print(hour)
-    return str(hour)
+# @app.route("/get/current/hour")
+# def get_current_hour():
+#     hour = subprocess.run("../win32/a.exe").returncode
+#     print(hour)
+#     return str(hour)
 
-@app.route("/day")
-def get_current_day():
+# @app.route("/day")
+# def get_current_day():
 
-    executor = ThreadPoolExecutor(max_workers = 2)
-    val = executor.submit(start_client)
-    executor.submit(start_server)
-    print(val.result)
-    return str(val.result())
+#     executor = ThreadPoolExecutor(max_workers = 2)
+#     val = executor.submit(start_client)
+#     executor.submit(start_server)
+#     print(val.result)
+#     return str(val.result())
 
-def start_client():
-    return subprocess.run("java Client localhost 54321", encoding="utf-8", cwd="../sockets", capture_output=True).stdout
+# def start_client():
+#     return subprocess.run("java Client localhost 54321", encoding="utf-8", cwd="../sockets", capture_output=True).stdout
 
-def start_server():
-    subprocess.run("java Server 54321", cwd="../sockets")  
+# def start_server():
+#     subprocess.run("java Server 54321", cwd="../sockets")  
+
+if __name__ == "__main__":
+    app.run(debug=True)

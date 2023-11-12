@@ -84,27 +84,13 @@ function handleDayRequest() {
 
 function makeSecondRequest() {
     let request = new XMLHttpRequest();
-    request.addEventListener("load", recieveSecondFileAndMakeSecondSecondRequest);
+    request.addEventListener("load", handleSecondRequest);
     request.open("GET", "http://127.0.0.1:5000/get/date/sec/onds");
     request.send();
 }
 
-function recieveSecondFileAndMakeSecondSecondRequest() {
-    //response is bytes
-    let fileRequest = new XMLHttpRequest();
-    let fileAsFormData = new FormData();
 
-    console.log(this.response);
-    
-    fileRequest.open("POST", "http://localhost:5000/convert/from/image/to/text");
-    fileRequest.addEventListener("load", handleSecondSecondRequest);
-    fileRequest.setRequestHeader("Content-Type", "multipart/form-data", "image.png");
-
-    fileAsFormData.append("image", this.response)
-    fileRequest.send(fileAsFormData);
-}
-
-function handleSecondSecondRequest() {
+function handleSecondRequest() {
     console.log(this.responseText);
     document.getElementById("second").textContent = this.responseText.toLocaleString(undefined, {minimumIntegerDigits: 2});
 }
